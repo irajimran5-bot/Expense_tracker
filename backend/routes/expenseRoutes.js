@@ -3,6 +3,6 @@ import { getExpenses,addExpense, deleteExpense,updateExpense } from "../controll
 const router=express.Router();
 router.get("/",getExpenses);
 router.post("/",addExpense);
-router.delete(":/id",deleteExpense);
-router.put(":/id",updateExpense);
+router.delete("/:id",deleteExpense);
+router.put("/:id",updateExpense);
 export default router;
