@@ -1,4 +1,4 @@
-const validateExpense=(req,res,next)=>{
+export const validateExpense=(req,res,next)=>{
     const{title,amount,category}=req.body;
     if(!title||!amount||!category){
         return res.status(400).json({
@@ -26,4 +26,3 @@ const validateExpense=(req,res,next)=>{
     }
     next();//if still something else is invalid, pass it on to controller
 };
-module.exports={validateExpense};
