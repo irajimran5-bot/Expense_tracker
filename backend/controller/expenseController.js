@@ -58,3 +58,30 @@ export const updateExpense=async(req,res,next)=>{
         next(error);
     }
 }
+export const getExpenseStats=async(req,res,next)=>{
+    try{
+       const stats=await Expense.aggregate([
+            {
+                $group:{
+                    _id:"$category",
+                    totalAmount:{$sum:"$amount"},
+                    count:{$sum:1}
+                }
+                
+            },
+            
+           {
+             $sort:{
+                totalAmount:-1
+            
+              }
+            }
+        
+
+
+        ]);
+    res.status(200).json(stats);
+    }catch(error){
+        next(error);
+    }
+}
