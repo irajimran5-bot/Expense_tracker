@@ -1,7 +1,8 @@
 import express from "express";
 import { validateExpense } from "../middleware/validator.js";
-import { getExpenses,addExpense, deleteExpense,updateExpense } from "../controller/expenseController.js";
+import { getExpenses,addExpense, deleteExpense,updateExpense,getExpenseStats } from "../controller/expenseController.js";
 const router=express.Router();
+router.get("/stats",getExpenseStats);
 router.get("/",getExpenses);
 router.post('/',validateExpense,addExpense);
 router.delete("/:id",deleteExpense);
