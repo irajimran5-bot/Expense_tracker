@@ -1,5 +1,5 @@
 export const validateExpense=(req,res,next)=>{
-    const{title,amount,category}=req.body;
+    const{title,amount,category,date}=req.body;
     if(!title||!amount||!category){
         return res.status(400).json({
             success:false,
