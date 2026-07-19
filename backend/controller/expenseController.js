@@ -2,9 +2,29 @@ import mongoose from "mongoose";
 import Expense from "../models/Expense.js";
 export const getExpenses=async(req,res,next)=>{
     try{
-        const expenses=await Expense.find();
+        const {category,title,minAmount,maxAmount}=req.query;
+        const queryObj={}
+        
+        if(title){
+            queryObj.title={
+                $regex:title,
+                $options:"i"//i means case insensitive
+            };
+        }
+        if(category){
+            queryObj.category=category;
+        }
+        if(minAmount||maxAmount){
+            queryObj.amount={};
+            if(minAmount){
+                queryObj.amount.$gte=Number(minAmount);
+            }
+            if(maxAmount){
+                queryObj.amount.$lte=Number(maxAmount);
+            }
+        }
+        const expenses=await Expense.find(queryObj);
         res.status(200).json(expenses);
-
     }catch(error){
         next(error);
     }
