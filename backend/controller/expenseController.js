@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import Expense from "../models/Expense.js";
 export const getExpenses=async(req,res,next)=>{
     try{
-        const {category,title,minAmount,maxAmount}=req.query;
+        const {category,title,minAmount,maxAmount,page,limit,sort}=req.query;
         const queryObj={}
         
         if(title){
@@ -25,9 +25,9 @@ export const getExpenses=async(req,res,next)=>{
         }
         const expenses=await Expense.find(queryObj);
         res.status(200).json(expenses);
-        const page=Number(req.query.page)||1;
-        const limit=Number(req.query.limit)||10;
-        const skip=(page-1)*limit;
+        const pageNumber = Number(page) || 1;
+        const limitNumber = Number(limit) || 10;
+        const skip = (pageNumber - 1) * limitNumber;
         const sortBy=sort ||"-createdAt";
         const expense=await Expense.find(queryObj)
         .sort(sortBy).skip(skip).limit(limit);
