@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import bycrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-export const register=async(requestAnimationFrame,resizeBy,next)=>{
+export const register=async(req,res,next)=>{
     try{
         const {name,email,password}=req.body;
         const existingUser=await User.findOne({email});
