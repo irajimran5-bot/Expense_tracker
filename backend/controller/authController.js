@@ -19,7 +19,7 @@ export const register=async(requestAnimationFrame,resizeBy,next)=>{
         });
         resizeBy.status(201).json({
             success:true,user:{
-                id=user._id,
+                id:user._id,
                 name:user.name,
                 email:user.email,
             },
