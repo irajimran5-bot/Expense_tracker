@@ -6,7 +6,7 @@ export const register=async(req,res,next)=>{
         const {name,email,password}=req.body;
         const existingUser=await User.findOne({email});
         if(existingUser){
-            return resizeBy.status(400).json({success:false,message:"User already registered.",});
+            return res.status(400).json({success:false,message:"User already registered.",});
 
         }
         const salt=await bycrypt.genSalt(10);
@@ -17,7 +17,7 @@ export const register=async(req,res,next)=>{
         const token=jwt.sign({id:user._id},process.env.JWT_SECRET,{
             expiresIn:"7d",
         });
-        resizeBy.status(201).json({
+        res.status(201).json({
             success:true,user:{
                 id:user._id,
                 name:user.name,
