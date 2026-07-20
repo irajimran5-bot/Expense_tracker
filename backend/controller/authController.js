@@ -18,7 +18,7 @@ export const register=async(req,res,next)=>{
             expiresIn:"7d",
         });
         res.status(201).json({
-            success:true,user:{
+            success:true,token,user:{
                 id:user._id,
                 name:user.name,
                 email:user.email,
