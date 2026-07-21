@@ -1,33 +1,48 @@
 import User from "../models/User.js";
-import bycrypt from "bcryptjs";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-export const register=async(req,res,next)=>{
-    try{
-        const {name,email,password}=req.body;
-        const existingUser=await User.findOne({email});
-        if(existingUser){
-            return res.status(400).json({success:false,message:"User already registered.",});
 
-        }
-        const salt=await bycrypt.genSalt(10);
-        const hashPassword=await bycrypt.hash(password,salt);
-        const user=await User.create({
-            name,email,password:hashPassword,
-        });
-        const token=jwt.sign({id:user._id},process.env.JWT_SECRET,{
-            expiresIn:"7d",
-        });
-        res.status(201).json({
-            success:true,token,user:{
-                id:user._id,
-                name:user.name,
-                email:user.email,
-            },
-        });
-    }catch(error){
-        next(error);
+// 1. REGISTER USER
+export const register = async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        success: false,
+        message: "User already registered.",
+      });
     }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
+
+    const user = await User.create({
+      name,
+      email,
+      password: hashPassword,
+    });
+
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.status(201).json({
+      success: true,
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
 };
+
+// 2. LOGIN USER
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -39,6 +54,7 @@ export const login = async (req, res, next) => {
         message: "Invalid email or password.",
       });
     }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({
@@ -46,6 +62,7 @@ export const login = async (req, res, next) => {
         message: "Invalid email or password.",
       });
     }
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });

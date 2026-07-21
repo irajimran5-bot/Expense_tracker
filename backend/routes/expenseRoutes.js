@@ -1,12 +1,12 @@
 import express from "express";
-import { validateExpense } from "../middleware/validator.js";
 import { getExpenses,addExpense, deleteExpense,updateExpense,getExpenseStats } from "../controller/expenseController.js";
 import { protect } from "../middleware/authMiddleware.js";
+import { validateExpense } from "../middleware/validator.js";
+const router=express.Router();
+router.post("/", protect, validateExpense, addExpense);
+router.get("/", protect, getExpenses);
+router.delete("/:id", protect, deleteExpense);
+router.put("/:id", protect, validateExpense, updateExpense);
+router.get("/stats", protect, getExpenseStats);
 
-const router=express.Router(protect);
-router.get("/stats",getExpenseStats);
-router.get("/",getExpenses);
-router.post('/',validateExpense,addExpense);
-router.delete("/:id",deleteExpense);
-router.put("/:id",updateExpense);
 export default router;

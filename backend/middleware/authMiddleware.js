@@ -3,7 +3,7 @@ import User from "../models/User.js";
 export const protect=async(req,res,next)=>{
     try{
         let token;
-        if(req.headers.authorization&&req.headers.authorization.startWish("Bearer")){
+        if(req.headers.authorization&&req.headers.authorization.startsWith("Bearer")){
             token=req.headers.authorization.split(" ")[1];
         }
         if(!token){
@@ -26,6 +26,7 @@ export const protect=async(req,res,next)=>{
         res.status(401).json({
         success: false,
         message: "Invalid or expired token.",
+        errorDetails:error.message,
         });
     }
 }
