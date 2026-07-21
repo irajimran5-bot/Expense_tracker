@@ -3,7 +3,7 @@ import Expense from "../models/Expense.js";
 export const getExpenses=async(req,res,next)=>{
     try{
         const {category,title,minAmount,maxAmount,page,limit,sort}=req.query;
-        const queryObj={}
+        const queryObj={user:req.user._id,}
         
         if(title){
             queryObj.title={
@@ -48,7 +48,7 @@ export const getExpenses=async(req,res,next)=>{
 export const addExpense=async(req,res,next)=>{
     try{
         const{title,amount,category}=req.body;
-        const newExpense=await Expense.create({title,amount,category});
+        const newExpense=await Expense.create({title,amount,category,user:req.user._id,});
         res.status(201).json(newExpense);
     }catch(error){
         next(error);
@@ -77,6 +77,7 @@ export const updateExpense=async(req,res,next)=>{
 export const getExpenseStats=async(req,res,next)=>{
     try{
        const stats=await Expense.aggregate([
+        {$match:{user:req.user._id}},
             {
                 $group:{
                     _id:"$category",
