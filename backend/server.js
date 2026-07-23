@@ -19,9 +19,9 @@ app.use(
 );
 
 app.use(express.json());
+app.use(["/api/auth", "/auth"], authRoutes);
+app.use(["/api/expenses", "/expenses"], expenseRoutes);
 
-app.use("/api/expenses", expenseRoutes);
-app.use("/api/auth", authRoutes);
 
 app.use(errorHandler);
 
