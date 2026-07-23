@@ -4,7 +4,6 @@ import dotenv from "dotenv";
 import expenseRoutes from "./routes/expenseRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import connectDB from "./config/db.js";
-import User from "./models/User.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -19,7 +18,7 @@ app.use(
 );
 app.use(express.json());
 
-// Database Connection Middleware
+// Database connection middleware
 app.use(async (req, res, next) => {
   try {
     await connectDB();
@@ -29,40 +28,14 @@ app.use(async (req, res, next) => {
   }
 });
 
-// Netlify bundling fix (extracts .default if present)
-const authHandler = authRoutes?.default || authRoutes;
-const expenseHandler = expenseRoutes?.default || expenseRoutes;
+// Routes — Check if handlers are valid functions/routers
+if (authRoutes) app.use(["/api/auth", "/auth"], authRoutes);
+if (expenseRoutes) app.use(["/api/expenses", "/expenses"], expenseRoutes);
 
-// Routes setup
-if (typeof authHandler === "function") {
-  app.use("/api/auth", authHandler);
-  app.use("/auth", authHandler);
+// Error Handler
+if (typeof errorHandler === "function") {
+  app.use(errorHandler);
 }
-
-if (typeof expenseHandler === "function") {
-  app.use("/api/expenses", expenseHandler);
-  app.use("/expenses", expenseHandler);
-}
-app.put("/api/update-income", protect, async (req, res) => {
-  try {
-    const { totalIncome } = req.body;
-    const updatedUser = await User.findByIdAndUpdate(
-      req.user.id,
-      { totalIncome },
-      { new: true }
-    ).select("-password");
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.json({ message: "Income updated successfully", user: updatedUser });
-  } catch (error) {
-    res.status(500).json({ message: "Server error" });
-  }
-});
-// Error Handling Middleware
-app.use(errorHandler);
 
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 5000;
