@@ -105,7 +105,36 @@ const Dashboard = () => {
     value: categoryTotals[cat],
   }));
 
-  const COLORS = ["#8b5cf6", "#14b8a6", "#f43f5e", "#f59e0b", "#3b82f6", "#64748b"];
+  // Vibrant Palette
+  const COLORS = [
+    "#8b5cf6", // Violet
+    "#06b6d4", // Cyan
+    "#f43f5e", // Rose
+    "#f59e0b", // Amber
+    "#10b981", // Emerald
+    "#6366f1", // Indigo
+  ];
+
+  // Custom Tooltip Styling
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0];
+      const percentage = totalExpenseAmount
+        ? ((data.value / totalExpenseAmount) * 100).toFixed(1)
+        : 0;
+
+      return (
+        <div className="bg-slate-900/95 text-white backdrop-blur-md px-3.5 py-2.5 rounded-xl border border-slate-800 shadow-xl text-xs space-y-1">
+          <p className="font-semibold text-slate-300">{data.name}</p>
+          <p className="font-bold text-sm text-violet-400">
+            Rs. {Number(data.value).toFixed(2)}
+            <span className="text-slate-400 font-normal ml-1.5">({percentage}%)</span>
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
@@ -224,31 +253,89 @@ const Dashboard = () => {
 
           {/* Right Column: Chart & Transactions */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Visual Analytics Chart */}
+            
+            {/* Styled Donut Chart Card */}
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-              <h2 className="text-lg font-bold text-slate-800 mb-2">Category Breakdown</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-bold text-slate-800">Category Breakdown</h2>
+                <span className="text-xs font-semibold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-full">
+                  {chartData.length} Active Categories
+                </span>
+              </div>
+
               {chartData.length === 0 ? (
-                <p className="text-slate-400 text-sm py-8 text-center">Add expenses to see category analytics.</p>
+                <div className="py-12 text-center space-y-1">
+                  <p className="text-slate-400 text-sm font-medium">No expenses logged yet.</p>
+                  <p className="text-slate-300 text-xs">Add an entry on the left to see analytics.</p>
+                </div>
               ) : (
-                <div className="h-56 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={chartData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={50}
-                        outerRadius={80}
-                        paddingAngle={5}
-                        dataKey="value"
-                      >
-                        {chartData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip formatter={(value) => `Rs. ${Number(value).toFixed(2)}`} />
-                    </PieChart>
-                  </ResponsiveContainer>
+                <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+                  
+                  {/* Chart with Central Label Overlay */}
+                  <div className="md:col-span-3 h-64 relative flex items-center justify-center">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={chartData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={65}
+                          outerRadius={92}
+                          paddingAngle={4}
+                          dataKey="value"
+                          stroke="none"
+                        >
+                          {chartData.map((entry, index) => (
+                            <Cell
+                              key={`cell-${index}`}
+                              fill={COLORS[index % COLORS.length]}
+                              className="hover:opacity-85 transition-opacity cursor-pointer"
+                            />
+                          ))}
+                        </Pie>
+                        <Tooltip content={<CustomTooltip />} />
+                      </PieChart>
+                    </ResponsiveContainer>
+
+                    {/* Central Text Badge */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                      <span className="text-[10px] uppercase tracking-wider font-bold text-slate-400">
+                        Spent
+                      </span>
+                      <span className="text-lg font-extrabold text-slate-800">
+                        Rs.{totalExpenseAmount > 1000 ? `${(totalExpenseAmount / 1000).toFixed(1)}k` : totalExpenseAmount.toFixed(0)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Clean Legend Breakdown List */}
+                  <div className="md:col-span-2 space-y-2.5 border-t md:border-t-0 md:border-l border-slate-100 pt-4 md:pt-0 md:pl-6">
+                    {chartData.map((entry, index) => {
+                      const pct = totalExpenseAmount
+                        ? ((entry.value / totalExpenseAmount) * 100).toFixed(0)
+                        : 0;
+                      return (
+                        <div key={entry.name} className="flex items-center justify-between text-xs">
+                          <div className="flex items-center gap-2">
+                            <span
+                              className="w-2.5 h-2.5 rounded-full shrink-0"
+                              style={{ backgroundColor: COLORS[index % COLORS.length] }}
+                            />
+                            <span className="font-medium text-slate-600 truncate max-w-[90px]">
+                              {entry.name}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 font-semibold text-slate-800">
+                            <span>Rs.{entry.value}</span>
+                            <span className="text-[10px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded">
+                              {pct}%
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
                 </div>
               )}
             </div>
