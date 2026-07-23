@@ -1,21 +1,19 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import serverless from "serverless-http";
-import expenseRoutes from "../../backend/routes/expenseRoutes.js";
-import authRoutes from "../../backend/routes/authRoutes.js";
-import connectDB from "../../backend/config/db.js";
-import { errorHandler } from "../../backend/middleware/errorHandler.js";
+import expenseRoutes from "./routes/expenseRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import connectDB from "./config/db.js";
+import { errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
-
 connectDB();
 
 const app = express();
 
 app.use(
   cors({
-    origin: true, 
+    origin: true,
     credentials: true,
   })
 );
@@ -33,4 +31,5 @@ if (process.env.NODE_ENV !== "production") {
     console.log(`Server running successfully on PORT: ${PORT}`);
   });
 }
-export const handler = serverless(app);
+
+export default app;
