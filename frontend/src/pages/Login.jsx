@@ -14,7 +14,7 @@ const Login=()=>{
     setLoading(true);
 
     try {
-      const { data } = await API.post("/api/auth/login", formData);
+      const { data } = await API.post("/auth/login", formData);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
       navigate("/dashboard");
