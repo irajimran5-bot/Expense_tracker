@@ -5,7 +5,14 @@
 [functions]
   directory = "netlify/functions"
 
+# 1. Serverless API Redirect
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/api/:splat"
+  status = 200
+
+# 2. React Router SPA Catch-all 
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
   status = 200
