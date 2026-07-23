@@ -35,6 +35,7 @@ export const register = async (req, res, next) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        totalIncome: user.totalIncome || 0,
       },
     });
   } catch (error) {
@@ -74,6 +75,7 @@ export const login = async (req, res, next) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        totalIncome: user.totalIncome || 0,
       },
     });
   } catch (error) {

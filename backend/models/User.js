@@ -10,6 +10,7 @@ const userSchema=new mongoose.Schema({
     password: {
       type: String,required: [true, "Password is required"],minlength: 6,
     },
+    totalIncome:{type: Number, default: 0},
 },
 {timestamps:true}
 );
