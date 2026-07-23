@@ -8,10 +8,8 @@ import { errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
 
-// 1. Initialize Express app FIRST
 const app = express();
 
-// 2. CORS & JSON Middleware
 app.use(
   cors({
     origin: true,
@@ -20,7 +18,7 @@ app.use(
 );
 app.use(express.json());
 
-// 3. Database Connection Middleware (Auto-connects on request)
+// Database connection middleware
 app.use(async (req, res, next) => {
   try {
     await connectDB();
@@ -30,14 +28,15 @@ app.use(async (req, res, next) => {
   }
 });
 
-// 4. Routes
-app.use(["/api/auth", "/auth"], authRoutes);
-app.use(["/api/expenses", "/expenses"], expenseRoutes);
+// Routes — Check if handlers are valid functions/routers
+if (authRoutes) app.use(["/api/auth", "/auth"], authRoutes);
+if (expenseRoutes) app.use(["/api/expenses", "/expenses"], expenseRoutes);
 
-// 5. Error Handling
-app.use(errorHandler);
+// Error Handler
+if (typeof errorHandler === "function") {
+  app.use(errorHandler);
+}
 
-// 6. Local Development Server
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
