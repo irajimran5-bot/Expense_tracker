@@ -101,3 +101,25 @@ export const getExpenseStats=async(req,res,next)=>{
         next(error);
     }
 }
+export const updateIncome = async (req, res) => {
+  try {
+    const { totalIncome } = req.body;
+
+    if (totalIncome === undefined || totalIncome < 0) {
+      return res.status(400).json({ message: "Please provide a valid income amount" });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      { totalIncome },
+      { new: true }
+    );
+
+    res.status(200).json({ 
+      message: "Income updated successfully", 
+      totalIncome: user.totalIncome 
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Server error updating income" });
+  }
+};

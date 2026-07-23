@@ -1,5 +1,5 @@
 import express from "express";
-import { getExpenses,addExpense, deleteExpense,updateExpense,getExpenseStats } from "../controller/expenseController.js";
+import { getExpenses,addExpense, deleteExpense,updateExpense,getExpenseStats,updateIncome } from "../controller/expenseController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import { validateExpense } from "../middleware/validator.js";
 const router=express.Router();
@@ -8,5 +8,5 @@ router.get("/", protect, getExpenses);
 router.delete("/:id", protect, deleteExpense);
 router.put("/:id", protect, validateExpense, updateExpense);
 router.get("/stats", protect, getExpenseStats);
-
+router.put("/income", protect, updateIncome);
 export default router;
