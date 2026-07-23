@@ -37,8 +37,8 @@ const Dashboard = () => {
   const handleUpdateIncome = async (e) => {
     e.preventDefault();
     try {
-      // Backend update API (adjust endpoint according to your routes)
-      await API.put("/auth/update-income", { totalIncome: Number(newIncome) });
+      
+      await API.put("/expenses/update-income", { totalIncome: Number(newIncome) });
       
       const updatedIncome = Number(newIncome);
       setTotalIncome(updatedIncome);
