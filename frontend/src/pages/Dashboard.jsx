@@ -1,8 +1,21 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import API from "../api/axios";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+  const [expenses, setExpenses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [formLoading, setFormLoading] = useState(false);
+
+  const [formData, setFormData] = useState({
+    title: "",
+    category: "Food",
+    amount: "",
+    date: new Date().toISOString().split("T")[0],
+  });
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -10,24 +23,200 @@ const Dashboard = () => {
     navigate("/login");
   };
 
+  useEffect(() => {
+    const fetchExpenses = async () => {
+      try {
+        const { data } = await API.get("/expenses");
+        setExpenses(Array.isArray(data) ? data : data.expenses || []);
+      } catch (err) {
+        console.error("Failed to fetch expenses: ", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchExpenses();
+  }, []);
+
+  const handleAddExpense = async (e) => {
+    e.preventDefault();
+    setFormLoading(true);
+    try {
+      const { data } = await API.post("/expenses", {
+        ...formData,
+        amount: Number(formData.amount),
+      });
+      setExpenses((prev) => [data, ...prev]);
+
+      setFormData({
+        title: "",
+        amount: "",
+        category: "Food",
+        date: new Date().toISOString().split("T")[0],
+      });
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to add expense");
+    } finally {
+      setFormLoading(false);
+    }
+  };
+
+  // Dynamic Total Calculation
+  const totalExpenseAmount = expenses.reduce(
+    (sum, item) => sum + Number(item.amount || 0),
+    0
+  );
+
   return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 p-8">
-      <div className="max-w-4xl mx-auto flex justify-between items-center border-b border-slate-800 pb-6">
+    <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
+      {/* 1. Top Navigation Bar */}
+      <nav className="bg-white border-b border-slate-200 px-6 py-4 shadow-sm flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-emerald-400">Expense Tracker</h1>
-          <p className="text-slate-400 text-sm">Welcome, {user.name || "User"} 👋</p>
+          <h1 className="text-xl font-bold text-violet-600">Expense Tracker</h1>
+          <p className="text-xs text-slate-500">
+            Welcome, <span className="font-semibold text-slate-700">{user.name || "User"}</span>
+          </p>
         </div>
         <button
           onClick={handleLogout}
-          className="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 px-4 py-2 rounded-lg text-sm transition-colors"
+          className="px-4 py-2 text-sm font-medium text-slate-600 bg-slate-100 hover:bg-rose-50 hover:text-rose-600 rounded-lg transition-colors"
         >
           Logout
         </button>
-      </div>
+      </nav>
 
-      <div className="max-w-4xl mx-auto mt-12 text-center text-slate-500">
-        <p>Dashboard UI & Expense List feature loading next...</p>
-      </div>
+      <main className="max-w-6xl mx-auto px-4 mt-8 space-y-8">
+        {/* 2. Top Summary Cards Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Balance</p>
+            <h3 className="text-3xl font-bold text-slate-900 mt-2">Rs. 0.00</h3>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <p className="text-xs font-semibold text-teal-600 uppercase tracking-wider">Total Income</p>
+            <h3 className="text-3xl font-bold text-teal-600 mt-2">Rs. 0.00</h3>
+          </div>
+
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <p className="text-xs font-semibold text-rose-500 uppercase tracking-wider">Total Expenses</p>
+            <h3 className="text-3xl font-bold text-rose-600 mt-2">
+              Rs. {totalExpenseAmount.toFixed(2)}
+            </h3>
+          </div>
+        </div>
+
+        {/* 3. Main 2-Column Split View */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column: Form */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <h2 className="text-lg font-bold text-slate-800 mb-4">Add New Expense</h2>
+            <form onSubmit={handleAddExpense} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                  Title
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g., Grocery Shopping"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-2 text-slate-900 text-sm focus:outline-none focus:border-violet-600"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                  Amount (Rs.)
+                </label>
+                <input
+                  type="number"
+                  step="0.01"
+                  required
+                  placeholder="25.00"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-2 text-slate-900 text-sm focus:outline-none focus:border-violet-600"
+                  value={formData.amount}
+                  onChange={(e) => setFormData({ ...formData, amount: e.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                  Category
+                </label>
+                <select
+                  className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-2 text-slate-900 text-sm focus:outline-none focus:border-violet-600"
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                >
+                  <option value="Food">Food & Dining</option>
+                  <option value="Transport">Transport</option>
+                  <option value="Bills">Bills & Utilities</option>
+                  <option value="Entertainment">Entertainment</option>
+                  <option value="Shopping">Shopping</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                  Date
+                </label>
+                <input
+                  type="date"
+                  required
+                  className="w-full bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-2 text-slate-900 text-sm focus:outline-none focus:border-violet-600"
+                  value={formData.date}
+                  onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={formLoading}
+                className="w-full bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2.5 rounded-lg text-sm transition-colors duration-200 shadow-sm disabled:opacity-50 mt-2"
+              >
+                {formLoading ? "Adding..." : "Add Expense"}
+              </button>
+            </form>
+          </div>
+
+          {/* Right Column: Expense List */}
+          <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <h2 className="text-lg font-bold text-slate-800 mb-4">Recent Transactions</h2>
+            {loading ? (
+              <p className="text-slate-500 text-sm animate-pulse">Loading expenses...</p>
+            ) : expenses.length === 0 ? (
+              <p className="text-slate-400 text-sm">No expenses added yet. Create one on the left!</p>
+            ) : (
+              <div className="space-y-3 max-h-[450px] overflow-y-auto pr-1">
+                {expenses.map((item) => (
+                  <div
+                    key={item._id}
+                    className="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl hover:border-violet-300 transition-colors"
+                  >
+                    <div className="space-y-1">
+                      <p className="font-semibold text-slate-800 text-sm">{item.title}</p>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-semibold uppercase tracking-wide bg-violet-100 text-violet-700 px-2 py-0.5 rounded-md">
+                          {item.category}
+                        </span>
+                        <span className="text-xs text-slate-400">
+                          {new Date(item.date).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="font-bold text-rose-600 text-base">
+                      -Rs. {Number(item.amount).toFixed(2)}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
     </div>
   );
 };

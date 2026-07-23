@@ -54,7 +54,7 @@ return (
             <input
               type="password"
               required
-              className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:border-violet-600 text-slate-100"
+              className="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-2.5 focus:outline-none focus:border-violet-600 text-slate-900"
               placeholder="••••••••"
               value={formData.password}
               onChange={(e) => setFormData({ ...formData, password: e.target.value })}
