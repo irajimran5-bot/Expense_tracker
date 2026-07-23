@@ -102,7 +102,7 @@ export const getExpenseStats=async(req,res,next)=>{
         next(error);
     }
 }
-export const updateIncome = async (req, res) => {
+export const updateIncome = async (req, res,next) => {
   try {
     const { totalIncome } = req.body;
 
