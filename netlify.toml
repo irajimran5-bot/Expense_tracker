@@ -1,0 +1,16 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+  functions = "netlify/functions"
+
+# All API requests goes to Express Serverless Function
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/server/api/:splat"
+  status = 200
+
+# All React routes goes to index.html (Fixes 404 issue)
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

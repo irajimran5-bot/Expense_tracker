@@ -2,10 +2,10 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import serverless from "serverless-http";
-import expenseRoutes from "./routes/expenseRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
-import connectDB from "./config/db.js";
-import { errorHandler } from "./middleware/errorHandler.js";
+import expenseRoutes from "../../backend/routes/expenseRoutes.js";
+import authRoutes from "../../backend/routes/authRoutes.js";
+import connectDB from "../../backend/config/db.js";
+import { errorHandler } from "../../backend/middleware/errorHandler.js";
 
 dotenv.config();
 
