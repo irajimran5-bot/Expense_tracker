@@ -18,7 +18,7 @@ app.use(
 );
 app.use(express.json());
 
-// Database connection middleware
+// Database Connection Middleware
 app.use(async (req, res, next) => {
   try {
     await connectDB();
@@ -28,14 +28,23 @@ app.use(async (req, res, next) => {
   }
 });
 
-// Routes — Check if handlers are valid functions/routers
-if (authRoutes) app.use(["/api/auth", "/auth"], authRoutes);
-if (expenseRoutes) app.use(["/api/expenses", "/expenses"], expenseRoutes);
+// Netlify bundling fix (extracts .default if present)
+const authHandler = authRoutes?.default || authRoutes;
+const expenseHandler = expenseRoutes?.default || expenseRoutes;
 
-// Error Handler
-if (typeof errorHandler === "function") {
-  app.use(errorHandler);
+// Routes setup
+if (typeof authHandler === "function") {
+  app.use("/api/auth", authHandler);
+  app.use("/auth", authHandler);
 }
+
+if (typeof expenseHandler === "function") {
+  app.use("/api/expenses", expenseHandler);
+  app.use("/expenses", expenseHandler);
+}
+
+// Error Handling Middleware
+app.use(errorHandler);
 
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 5000;
