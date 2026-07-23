@@ -8,5 +8,5 @@ router.get("/", protect, getExpenses);
 router.delete("/:id", protect, deleteExpense);
 router.put("/:id", protect, validateExpense, updateExpense);
 router.get("/stats", protect, getExpenseStats);
-router.put("/update-income", protect, updateIncome);
+
 export default router;
