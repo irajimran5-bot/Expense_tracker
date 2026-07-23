@@ -37,7 +37,7 @@ const Dashboard = () => {
 const handleUpdateIncome = async (e) => {
   e.preventDefault();
   try {
-    const { data } = await API.put("/update-income", { 
+    const { data } = await API.put("/expense/update-income", { 
       totalIncome: Number(newIncome) 
     });
     
