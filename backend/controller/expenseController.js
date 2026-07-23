@@ -102,7 +102,7 @@ export const getExpenseStats=async(req,res,next)=>{
         next(error);
     }
 }
-export const updateIncome = async (req, res,next) => {
+export const updateIncome = async (req, res, next) => {
   try {
     const { totalIncome } = req.body;
 
@@ -121,7 +121,6 @@ export const updateIncome = async (req, res,next) => {
       user: updatedUser,
     });
   } catch (error) {
-    console.error("Update income error:", error);
-    res.status(500).json({ message: "Server error" });
+    next(error); 
   }
 };
