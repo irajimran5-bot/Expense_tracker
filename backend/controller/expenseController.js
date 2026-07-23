@@ -24,7 +24,6 @@ export const getExpenses=async(req,res,next)=>{
             }
         }
         const expenses=await Expense.find(queryObj);
-        res.status(200).json(expenses);
         const pageNumber = Number(page) || 1;
         const limitNumber = Number(limit) || 10;
         const skip = (pageNumber - 1) * limitNumber;
