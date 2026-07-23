@@ -17,7 +17,7 @@ const Login=()=>{
       const { data } = await API.post("/auth/login", formData);
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      navigate("/dashboard");
+      window.location.href = "/dashboard";
     } catch (err) {
       setError(err.response?.data?.message || "Invalid credentials");
     } finally {
