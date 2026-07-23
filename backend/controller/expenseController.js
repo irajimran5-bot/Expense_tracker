@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Expense from "../models/Expense.js";
+import User from "../models/User.js";
 export const getExpenses=async(req,res,next)=>{
     try{
         const {category,title,minAmount,maxAmount,page,limit,sort}=req.query;
@@ -105,21 +106,22 @@ export const updateIncome = async (req, res) => {
   try {
     const { totalIncome } = req.body;
 
-    if (totalIncome === undefined || totalIncome < 0) {
-      return res.status(400).json({ message: "Please provide a valid income amount" });
-    }
-
-    const user = await User.findByIdAndUpdate(
+    const updatedUser = await User.findByIdAndUpdate(
       req.user.id,
       { totalIncome },
       { new: true }
-    );
+    ).select("-password");
 
-    res.status(200).json({ 
-      message: "Income updated successfully", 
-      totalIncome: user.totalIncome 
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      message: "Income updated successfully",
+      user: updatedUser,
     });
   } catch (error) {
-    res.status(500).json({ message: "Server error updating income" });
+    console.error("Update income error:", error);
+    res.status(500).json({ message: "Server error" });
   }
 };
