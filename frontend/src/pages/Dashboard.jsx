@@ -34,25 +34,21 @@ const Dashboard = () => {
   const totalBalance = totalIncome - totalExpenseAmount;
 
   // Income update handler
-  const handleUpdateIncome = async (e) => {
-    e.preventDefault();
-    try {
-      
-      await API.put("/expenses/update-income", { totalIncome: Number(newIncome) });
-      
-      const updatedIncome = Number(newIncome);
-      setTotalIncome(updatedIncome);
-      
-      // Local storage sync
-      const updatedUser = { ...user, totalIncome: updatedIncome };
-      localStorage.setItem("user", JSON.stringify(updatedUser));
-      
-      setIsEditingIncome(false);
-    } catch (err) {
-      console.error("Income update failed", err);
-      alert("Failed to update income");
-    }
-  };
+const handleUpdateIncome = async (e) => {
+  e.preventDefault();
+  try {
+   
+    const { data } = await API.put("/expenses/update-income", { 
+      totalIncome: Number(newIncome) 
+    });
+    
+    setTotalIncome(data.user.totalIncome);
+    setIsEditingIncome(false);
+  } catch (err) {
+    console.error("Income update failed", err);
+  }
+};
+
 
   const handleLogout = () => {
     localStorage.removeItem("token");
