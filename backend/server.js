@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import expenseRoutes from "./routes/expenseRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import connectDB from "./config/db.js";
+import User from "./models/User.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
 dotenv.config();
@@ -42,7 +43,24 @@ if (typeof expenseHandler === "function") {
   app.use("/api/expenses", expenseHandler);
   app.use("/expenses", expenseHandler);
 }
+app.put("/api/update-income", protect, async (req, res) => {
+  try {
+    const { totalIncome } = req.body;
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { totalIncome },
+      { new: true }
+    ).select("-password");
 
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({ message: "Income updated successfully", user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
 // Error Handling Middleware
 app.use(errorHandler);
 
