@@ -8,6 +8,8 @@ const Dashboard = () => {
 
   const [expenses, setExpenses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [formLoading, setFormLoading] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -59,13 +61,31 @@ const Dashboard = () => {
       setFormLoading(false);
     }
   };
+  const handleDeleteExpense = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this expense?")) return;
 
+    try {
+      await API.delete(`/expenses/${id}`);
+      // UI se instantly remove kar dein
+      setExpenses((prev) => prev.filter((item) => item._id !== id));
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete expense");
+    }
+  };
   // Dynamic Total Calculation
   const totalExpenseAmount = expenses.reduce(
     (sum, item) => sum + Number(item.amount || 0),
     0
   );
+  const filteredExpenses = expenses.filter((item) => {
+  const matchesSearch = item.title
+    .toLowerCase()
+    .includes(searchTerm.toLowerCase());
+  const matchesCategory =
+    selectedCategory === "All" || item.category === selectedCategory;
 
+  return matchesSearch && matchesCategory;
+  });
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 pb-12">
       {/* 1. Top Navigation Bar */}
@@ -184,17 +204,41 @@ const Dashboard = () => {
           {/* Right Column: Expense List */}
           <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
             <h2 className="text-lg font-bold text-slate-800 mb-4">Recent Transactions</h2>
+            <div className="flex flex-col sm:flex-row gap-3 mb-4">
+            <input
+              type="text"
+              placeholder="Search by title..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="flex-1 bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-1.5 text-sm focus:outline-none focus:border-violet-600"
+            />
+
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="bg-slate-50 border border-slate-300 rounded-lg px-3.5 py-1.5 text-sm focus:outline-none focus:border-violet-600"
+            >
+              <option value="All">All Categories</option>
+              <option value="Food">Food & Dining</option>
+              <option value="Transport">Transport</option>
+              <option value="Bills">Bills & Utilities</option>
+              <option value="Entertainment">Entertainment</option>
+              <option value="Shopping">Shopping</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
             {loading ? (
               <p className="text-slate-500 text-sm animate-pulse">Loading expenses...</p>
             ) : expenses.length === 0 ? (
               <p className="text-slate-400 text-sm">No expenses added yet. Create one on the left!</p>
             ) : (
               <div className="space-y-3 max-h-[450px] overflow-y-auto pr-1">
-                {expenses.map((item) => (
+                {filteredExpenses.map((item) => (
                   <div
                     key={item._id}
                     className="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl hover:border-violet-300 transition-colors"
                   >
+                    {/* Left Side: Info */}
                     <div className="space-y-1">
                       <p className="font-semibold text-slate-800 text-sm">{item.title}</p>
                       <div className="flex items-center gap-2">
@@ -207,9 +251,21 @@ const Dashboard = () => {
                       </div>
                     </div>
 
-                    <p className="font-bold text-rose-600 text-base">
-                      -Rs. {Number(item.amount).toFixed(2)}
-                    </p>
+                    {/* Right Side: Grouped Amount & Delete Button */}
+                    <div className="flex items-center gap-4">
+                      <p className="font-bold text-rose-600 text-base">
+                        -Rs. {Number(item.amount).toFixed(2)}
+                      </p>
+                      <button
+                        onClick={() => handleDeleteExpense(item._id)}
+                        className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-rose-50 transition-colors"
+                        title="Delete expense"
+                      >
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
