@@ -103,3 +103,5 @@ Start the frontend development server:
 npm run dev
 
 ```
+
+To stay tuned for more exciting websites, follow me on LINKEDIN (link attached in my github profile).
