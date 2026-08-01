@@ -2,7 +2,7 @@
 
 SpendWise is a full-stack MERN (MongoDB, Express.js, React, Node.js) web application designed to help users efficiently track their daily expenses, manage their income, and visualize their spending habits through interactive charts.
 
-🌐 **Live Demo:** [SpendWise on Vercel](https://spendwise-8uw56gzmb-irajimran5-bots-projects.vercel.app/)
+🌐 **Live Demo:** [SpendWise on Vercel](https://spendwise-six-mocha.vercel.app/)
 
 ---
 
