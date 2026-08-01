@@ -97,7 +97,6 @@ const Dashboard = () => {
 
   const chartData = Object.keys(categoryTotals).map((cat) => ({ name: cat, value: categoryTotals[cat] }));
   
-  // Colors array jahan purple ki jagah orange kar diya hai
   const COLORS = ["#06b6d4", "#3b82f6", "#f97316", "#10b981", "#f59e0b", "#ec4899"];
 
   const CustomTooltip = ({ active, payload }) => {
@@ -122,14 +121,21 @@ const Dashboard = () => {
       <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-purple-400/40 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/2 -left-32 w-[600px] h-[600px] bg-teal-300/40 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Aesthetic Floating Background Elements (Cart, Books, Cards, Coins - Colored & Floating) */}
-      <div className="absolute top-16 left-12 text-cyan-200/30 text-5xl pointer-events-none animate-bounce select-none">🛒</div>
-      <div className="absolute top-32 right-20 text-pink-200/30 text-6xl pointer-events-none animate-pulse select-none">📚</div>
-      <div className="absolute top-1/3 left-1/4 text-amber-200/25 text-5xl pointer-events-none animate-pulse select-none">💳</div>
-      <div className="absolute top-1/2 right-12 text-teal-200/30 text-6xl pointer-events-none animate-bounce select-none">🪙</div>
-      <div className="absolute bottom-24 left-16 text-purple-200/30 text-6xl pointer-events-none animate-bounce select-none">🛍️</div>
-      <div className="absolute bottom-40 right-1/3 text-yellow-200/25 text-5xl pointer-events-none animate-pulse select-none">💰</div>
-      <div className="absolute bottom-12 right-24 text-cyan-300/30 text-5xl pointer-events-none animate-pulse select-none">📖</div>
+      {/* Aesthetic Floating Background Elements (Cars, Transport, Food, Dinner, Shopping, Finance) */}
+      <div className="absolute top-12 left-10 text-cyan-200/35 text-4xl pointer-events-none animate-bounce select-none">🚗</div>
+      <div className="absolute top-20 right-16 text-pink-200/35 text-5xl pointer-events-none animate-pulse select-none">🍕</div>
+      <div className="absolute top-36 left-1/4 text-amber-200/30 text-4xl pointer-events-none animate-pulse select-none">🚕</div>
+      <div className="absolute top-28 right-1/3 text-emerald-200/30 text-5xl pointer-events-none animate-bounce select-none">🍽️</div>
+      
+      <div className="absolute top-1/2 left-8 text-yellow-200/30 text-5xl pointer-events-none animate-bounce select-none">🍔</div>
+      <div className="absolute top-1/2 right-10 text-purple-200/35 text-5xl pointer-events-none animate-pulse select-none">🏎️</div>
+      <div className="absolute top-2/3 left-1/5 text-teal-200/35 text-4xl pointer-events-none animate-pulse select-none">🚌</div>
+      <div className="absolute top-3/5 right-1/4 text-rose-200/30 text-5xl pointer-events-none animate-bounce select-none">🍷</div>
+
+      <div className="absolute bottom-16 left-16 text-sky-200/35 text-5xl pointer-events-none animate-bounce select-none">🚙</div>
+      <div className="absolute bottom-24 right-20 text-orange-200/35 text-5xl pointer-events-none animate-pulse select-none">🍜</div>
+      <div className="absolute bottom-32 left-1/3 text-indigo-200/30 text-4xl pointer-events-none animate-pulse select-none">🚆</div>
+      <div className="absolute bottom-12 right-1/3 text-amber-300/30 text-5xl pointer-events-none animate-bounce select-none">🛒</div>
 
       {/* Navigation */}
       <nav className="sticky top-0 z-40 bg-white/10 backdrop-blur-2xl border-b border-white/20 px-6 py-4 flex justify-between items-center shadow-lg">
