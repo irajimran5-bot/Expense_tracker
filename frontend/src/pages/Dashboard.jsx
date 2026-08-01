@@ -97,7 +97,7 @@ const Dashboard = () => {
 
   const chartData = Object.keys(categoryTotals).map((cat) => ({ name: cat, value: categoryTotals[cat] }));
   
-
+  // Colors array jahan purple ki jagah orange kar diya hai
   const COLORS = ["#06b6d4", "#3b82f6", "#f97316", "#10b981", "#f59e0b", "#ec4899"];
 
   const CustomTooltip = ({ active, payload }) => {
@@ -122,11 +122,14 @@ const Dashboard = () => {
       <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-purple-400/40 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/2 -left-32 w-[600px] h-[600px] bg-teal-300/40 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Aesthetic Floating Background Icons (Bills, Shopping Cart, Books, Coins) */}
-      <div className="absolute top-24 left-10 text-white/10 text-6xl pointer-events-none animate-pulse select-none">🛒</div>
-      <div className="absolute top-40 right-16 text-white/10 text-6xl pointer-events-none animate-bounce select-none">receipt</div>
-      <div className="absolute bottom-20 left-20 text-white/10 text-6xl pointer-events-none select-none">📚</div>
-      <div className="absolute bottom-32 right-24 text-white/10 text-6xl pointer-events-none select-none">💳</div>
+      {/* Aesthetic Floating Background Elements (Cart, Books, Cards, Coins - Colored & Floating) */}
+      <div className="absolute top-16 left-12 text-cyan-200/30 text-5xl pointer-events-none animate-bounce select-none">🛒</div>
+      <div className="absolute top-32 right-20 text-pink-200/30 text-6xl pointer-events-none animate-pulse select-none">📚</div>
+      <div className="absolute top-1/3 left-1/4 text-amber-200/25 text-5xl pointer-events-none animate-pulse select-none">💳</div>
+      <div className="absolute top-1/2 right-12 text-teal-200/30 text-6xl pointer-events-none animate-bounce select-none">🪙</div>
+      <div className="absolute bottom-24 left-16 text-purple-200/30 text-6xl pointer-events-none animate-bounce select-none">🛍️</div>
+      <div className="absolute bottom-40 right-1/3 text-yellow-200/25 text-5xl pointer-events-none animate-pulse select-none">💰</div>
+      <div className="absolute bottom-12 right-24 text-cyan-300/30 text-5xl pointer-events-none animate-pulse select-none">📖</div>
 
       {/* Navigation */}
       <nav className="sticky top-0 z-40 bg-white/10 backdrop-blur-2xl border-b border-white/20 px-6 py-4 flex justify-between items-center shadow-lg">
@@ -195,18 +198,18 @@ const Dashboard = () => {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/90 uppercase tracking-wider mb-1.5">Category</label>
-                <select className="w-full bg-cyan-300/90 border border-white/30 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition-colors cursor-pointer" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
-                  <option value="Food">Food & Dining</option>
-                  <option value="Transport">Transport</option>
-                  <option value="Bills">Bills & Utilities</option>
-                  <option value="Entertainment">Entertainment</option>
-                  <option value="Shopping">Shopping</option>
-                  <option value="Other">Other</option>
+                <select className="w-full bg-black/20 border border-white/30 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition-colors cursor-pointer" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
+                  <option value="Food" className="bg-slate-900 text-white">Food & Dining</option>
+                  <option value="Transport" className="bg-slate-900 text-white">Transport</option>
+                  <option value="Bills" className="bg-slate-900 text-white">Bills & Utilities</option>
+                  <option value="Entertainment" className="bg-slate-900 text-white">Entertainment</option>
+                  <option value="Shopping" className="bg-slate-900 text-white">Shopping</option>
+                  <option value="Other" className="bg-slate-900 text-white">Other</option>
                 </select>
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/90 uppercase tracking-wider mb-1.5">Date</label>
-                <input type="date" required className="w-full bg-cyan-300/90 border border-white/30 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition-colors" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
+                <input type="date" required className="w-full bg-black/20 border border-white/30 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition-colors" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
               </div>
               <button type="submit" disabled={formLoading} className="w-full bg-white text-slate-900 hover:bg-slate-100 font-bold py-3 rounded-2xl text-sm transition-all shadow-lg disabled:opacity-50 mt-2 tracking-wide">
                 {formLoading ? "Adding..." : "Add Expense"}
