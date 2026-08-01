@@ -96,14 +96,16 @@ const Dashboard = () => {
   }, {});
 
   const chartData = Object.keys(categoryTotals).map((cat) => ({ name: cat, value: categoryTotals[cat] }));
-  const COLORS = ["#8b5cf6", "#3b82f6", "#06b6d4", "#10b981", "#f59e0b", "#ec4899"];
+  
+
+  const COLORS = ["#06b6d4", "#3b82f6", "#f97316", "#10b981", "#f59e0b", "#ec4899"];
 
   const CustomTooltip = ({ active, payload }) => {
     if (active && payload && payload.length) {
       const data = payload[0];
       const percentage = totalExpenseAmount ? ((data.value / totalExpenseAmount) * 100).toFixed(1) : 0;
       return (
-        <div className="bg-slate-900/90 text-white backdrop-blur-xl px-4 py-3 rounded-2xl border border-white/20 shadow-2xl text-xs space-y-1">
+        <div className="bg-slate-900/95 text-white backdrop-blur-xl px-4 py-3 rounded-2xl border border-cyan-400/30 shadow-2xl text-xs space-y-1">
           <p className="font-semibold text-cyan-300">{data.name}</p>
           <p className="font-bold text-sm text-white">Rs. {Number(data.value).toFixed(2)} <span className="text-cyan-400 font-normal">({percentage}%)</span></p>
         </div>
@@ -113,12 +115,18 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-500 via-blue-600 to-teal-400 text-slate-100 pb-16 selection:bg-cyan-400 selection:text-slate-900 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-purple-600 via-blue-700 to-teal-500 text-slate-100 pb-16 selection:bg-cyan-400 selection:text-slate-900 relative overflow-hidden">
       
-      {/* Mesh Gradient Aurora Glowing Elements */}
-      <div className="absolute top-0 left-0 w-full h-full opacity-40 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-pink-400 via-transparent to-transparent" />
+      {/* Background Glow Elements */}
+      <div className="absolute top-0 left-0 w-full h-full opacity-30 pointer-events-none bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-pink-400 via-transparent to-transparent" />
       <div className="absolute -top-32 -right-32 w-[600px] h-[600px] bg-purple-400/40 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute top-1/2 -left-32 w-[600px] h-[600px] bg-teal-300/40 rounded-full blur-[120px] pointer-events-none" />
+
+      {/* Aesthetic Floating Background Icons (Bills, Shopping Cart, Books, Coins) */}
+      <div className="absolute top-24 left-10 text-white/10 text-6xl pointer-events-none animate-pulse select-none">🛒</div>
+      <div className="absolute top-40 right-16 text-white/10 text-6xl pointer-events-none animate-bounce select-none">receipt</div>
+      <div className="absolute bottom-20 left-20 text-white/10 text-6xl pointer-events-none select-none">📚</div>
+      <div className="absolute bottom-32 right-24 text-white/10 text-6xl pointer-events-none select-none">💳</div>
 
       {/* Navigation */}
       <nav className="sticky top-0 z-40 bg-white/10 backdrop-blur-2xl border-b border-white/20 px-6 py-4 flex justify-between items-center shadow-lg">
@@ -170,9 +178,12 @@ const Dashboard = () => {
           
           {/* Add Expense Form */}
           <div className="bg-white/15 backdrop-blur-2xl p-6 rounded-3xl border border-white/30 shadow-xl h-fit">
-            <h2 className="text-base font-bold text-white mb-4 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-cyan-300 animate-ping" /> Add New Expense
-            </h2>
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-base font-bold text-white flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-cyan-300 animate-ping" /> Add New Expense
+              </h2>
+              <span className="text-lg">🛒</span>
+            </div>
             <form onSubmit={handleAddExpense} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-white/90 uppercase tracking-wider mb-1.5">Title</label>
@@ -184,7 +195,7 @@ const Dashboard = () => {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/90 uppercase tracking-wider mb-1.5">Category</label>
-                <select className="w-full bg-slate-900/80 border border-white/30 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition-colors cursor-pointer" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
+                <select className="w-full bg-cyan-300/90 border border-white/30 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition-colors cursor-pointer" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
                   <option value="Food">Food & Dining</option>
                   <option value="Transport">Transport</option>
                   <option value="Bills">Bills & Utilities</option>
@@ -195,7 +206,7 @@ const Dashboard = () => {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-white/90 uppercase tracking-wider mb-1.5">Date</label>
-                <input type="date" required className="w-full bg-slate-900/80 border border-white/30 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition-colors" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
+                <input type="date" required className="w-full bg-cyan-300/90 border border-white/30 rounded-2xl px-4 py-2.5 text-white text-sm focus:outline-none focus:border-white transition-colors" value={formData.date} onChange={(e) => setFormData({ ...formData, date: e.target.value })} />
               </div>
               <button type="submit" disabled={formLoading} className="w-full bg-white text-slate-900 hover:bg-slate-100 font-bold py-3 rounded-2xl text-sm transition-all shadow-lg disabled:opacity-50 mt-2 tracking-wide">
                 {formLoading ? "Adding..." : "Add Expense"}
@@ -209,7 +220,9 @@ const Dashboard = () => {
             {/* Chart Section */}
             <div className="bg-white/15 backdrop-blur-2xl p-6 rounded-3xl border border-white/30 shadow-xl">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="text-base font-bold text-white">Category Breakdown</h2>
+                <h2 className="text-base font-bold text-white flex items-center gap-2">
+                  <span>📊</span> Category Breakdown
+                </h2>
                 <span className="text-xs font-semibold text-white bg-white/20 border border-white/30 px-3 py-1 rounded-full">
                   {chartData.length} Categories
                 </span>
@@ -255,10 +268,12 @@ const Dashboard = () => {
 
             {/* Transactions Section */}
             <div className="bg-white/15 backdrop-blur-2xl p-6 rounded-3xl border border-white/30 shadow-xl">
-              <h2 className="text-base font-bold text-white mb-4">Recent Transactions</h2>
+              <h2 className="text-base font-bold text-white mb-4 flex items-center gap-2">
+                <span>📜</span> Recent Transactions
+              </h2>
               <div className="flex flex-col sm:flex-row gap-3 mb-4">
                 <input type="text" placeholder="Search by title..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="flex-1 bg-black/20 border border-white/30 rounded-2xl px-4 py-2 text-sm text-white placeholder-white/50 focus:outline-none focus:border-white" />
-                <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="bg-slate-900/80 border border-white/30 rounded-2xl px-4 py-2 text-sm text-white focus:outline-none focus:border-white cursor-pointer">
+                <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="bg-slate-900/90 border border-white/30 rounded-2xl px-4 py-2 text-sm text-white focus:outline-none focus:border-white cursor-pointer">
                   <option value="All">All Categories</option>
                   <option value="Food">Food & Dining</option>
                   <option value="Transport">Transport</option>
