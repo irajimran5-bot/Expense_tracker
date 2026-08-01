@@ -25,34 +25,39 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#070d1d] text-slate-100 flex items-center justify-center p-4 relative overflow-hidden">
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-tr from-blue-600/20 to-emerald-400/20 rounded-full blur-[100px] pointer-events-none" />
-      <div className="w-full max-w-md bg-[#0c1633]/60 backdrop-blur-xl p-8 rounded-2xl shadow-2xl border border-cyan-500/20 relative z-10">
-        <h2 className="text-3xl font-extrabold text-center bg-gradient-to-r from-white via-cyan-200 to-cyan-400 bg-clip-text text-transparent mb-2">CREATE ACCOUNT</h2>
-        <p className="text-cyan-300/70 text-center text-xs mb-6 uppercase tracking-wider font-semibold">Start managing your personal finance</p>
+    <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e1b4b] to-[#0f172a] text-slate-100 flex items-center justify-center p-4 relative overflow-hidden selection:bg-cyan-400 selection:text-slate-900">
+      {/* Soft Glowing Ambient Lights */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] bg-gradient-to-tr from-cyan-400/25 to-indigo-500/25 rounded-full blur-[120px] pointer-events-none" />
 
-        {error && <div className="bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs p-3 rounded-xl mb-4 text-center">{error}</div>}
+      <div className="w-full max-w-md bg-slate-900/40 backdrop-blur-2xl p-8 rounded-3xl shadow-2xl border border-cyan-400/30 relative z-10">
+        <div className="text-center mb-6">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-400 to-blue-500 flex items-center justify-center shadow-lg shadow-cyan-500/30 font-extrabold text-slate-950 text-xl mx-auto mb-3">S</div>
+          <h2 className="text-2xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-300 tracking-wide">CREATE ACCOUNT</h2>
+          <p className="text-cyan-200/80 text-xs mt-1 uppercase tracking-wider font-medium">Start managing your personal finance</p>
+        </div>
+
+        {error && <div className="bg-rose-500/15 border border-rose-500/40 text-rose-300 text-xs p-3 rounded-xl mb-4 text-center">{error}</div>}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-semibold text-cyan-300/70 uppercase tracking-wider mb-1.5">Full Name</label>
-            <input type="text" required className="w-full bg-[#050b18]/80 border border-cyan-500/20 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400" placeholder="Your Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
+            <label className="block text-xs font-semibold text-cyan-200/90 uppercase tracking-wider mb-1.5">Full Name</label>
+            <input type="text" required className="w-full bg-slate-950/60 border border-cyan-400/30 rounded-2xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-300 transition-all" placeholder="Your Name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-cyan-300/70 uppercase tracking-wider mb-1.5">Email</label>
-            <input type="email" required className="w-full bg-[#050b18]/80 border border-cyan-500/20 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400" placeholder="name@gmail.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+            <label className="block text-xs font-semibold text-cyan-200/90 uppercase tracking-wider mb-1.5">Email</label>
+            <input type="email" required className="w-full bg-slate-950/60 border border-cyan-400/30 rounded-2xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-300 transition-all" placeholder="name@gmail.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-cyan-300/70 uppercase tracking-wider mb-1.5">Password</label>
-            <input type="password" required className="w-full bg-[#050b18]/80 border border-cyan-500/20 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-cyan-400" placeholder="••••••••" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+            <label className="block text-xs font-semibold text-cyan-200/90 uppercase tracking-wider mb-1.5">Password</label>
+            <input type="password" required className="w-full bg-slate-950/60 border border-cyan-400/30 rounded-2xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-300 transition-all" placeholder="••••••••" value={formData.password} onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
           </div>
-          <button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-cyan-500/25 mt-2 disabled:opacity-50 text-sm tracking-wide">
+          <button type="submit" disabled={loading} className="w-full bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-slate-950 font-extrabold py-3.5 rounded-2xl transition-all shadow-xl shadow-cyan-500/20 mt-2 disabled:opacity-50 text-sm tracking-wide">
             {loading ? "Creating Account..." : "Register"}
           </button>
         </form>
 
-        <p className="text-cyan-300/70 text-xs text-center mt-6">
-          Already have an account? <Link to="/login" className="text-cyan-400 hover:underline font-semibold">Log In</Link>
+        <p className="text-cyan-200/80 text-xs text-center mt-6">
+          Already have an account? <Link to="/login" className="text-cyan-300 hover:text-white font-bold underline underline-offset-4">Log In</Link>
         </p>
       </div>
     </div>
